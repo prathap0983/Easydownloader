@@ -346,68 +346,121 @@ app.post('/api/youtube', async (req, res) => {
   }
 
   try {
-    const stdout = await runYtDlp([
-      url.trim(),
-      '--dump-single-json',
-      '--no-check-certificates',
-      '--no-warnings',
-      '--extractor-args', 'youtube:player-client=ios,android,web_embedded',
-      '--geo-bypass'
-    ]);
+    let title = 'YouTube Video';
+    let durationStr = '0:00';
+    let thumbnailUrl = '';
+    const videoOptions = [];
 
-    const meta = JSON.parse(stdout);
-    const title = meta.title || 'YouTube Video';
-    const durationSec = parseInt(meta.duration) || 0;
-    
-    // Format duration
-    const min = Math.floor(durationSec / 60);
-    const sec = durationSec % 60;
-    const durationStr = `${min}:${sec.toString().padStart(2, '0')}`;
-    
-    // Select the highest quality thumbnail
-    let thumbnailUrl = meta.thumbnail || '';
-    if (meta.thumbnails && meta.thumbnails.length > 0) {
-      const sortedThumbnails = [...meta.thumbnails].sort((a, b) => {
-        const aWidth = a.width || 0;
-        const bWidth = b.width || 0;
-        return bWidth - aWidth;
-      });
-      if (sortedThumbnails[0] && sortedThumbnails[0].url) {
-        thumbnailUrl = sortedThumbnails[0].url;
+    try {
+      const stdout = await runYtDlp([
+        url.trim(),
+        '--dump-single-json',
+        '--no-check-certificates',
+        '--no-warnings',
+        '--extractor-args', 'youtube:player-client=ios,android,web_embedded',
+        '--geo-bypass'
+      ]);
+
+      const meta = JSON.parse(stdout);
+      title = meta.title || 'YouTube Video';
+      const durationSec = parseInt(meta.duration) || 0;
+      const min = Math.floor(durationSec / 60);
+      const sec = durationSec % 60;
+      durationStr = `${min}:${sec.toString().padStart(2, '0')}`;
+      
+      thumbnailUrl = meta.thumbnail || '';
+      if (meta.thumbnails && meta.thumbnails.length > 0) {
+        const sortedThumbnails = [...meta.thumbnails].sort((a, b) => {
+          const aWidth = a.width || 0;
+          const bWidth = b.width || 0;
+          return bWidth - aWidth;
+        });
+        if (sortedThumbnails[0] && sortedThumbnails[0].url) {
+          thumbnailUrl = sortedThumbnails[0].url;
+        }
       }
-    }
 
-    // Collect available resolutions (heights)
-    const heights = new Set();
-    if (meta.formats) {
-      meta.formats.forEach(f => {
+      const heights = new Set();
+      if (meta.formats) {
+        meta.formats.forEach(f => {
+          if (f.height) {
+            heights.add(f.height);
+          }
+        });
+      }
+
+      const targetHeights = [144, 240, 360, 480, 720, 1080, 1440, 2160];
+      targetHeights.forEach(h => {
+        if (heights.has(h)) {
+          let label = `${h}p`;
+          if (h === 144) label = 'Fast (144p) Low - Poor video quality';
+          else if (h === 240) label = 'Fast (240p) - Low quality for quick play';
+          else if (h === 360) label = 'Fast (360p) - Normal quality for quick play';
+          else if (h === 480) label = 'Fast (480p) - Normal quality for quick play';
+          else if (h === 720) label = 'High quality (720p) - Clear view and quick play';
+          else if (h === 1080) label = 'High quality (1080p) - High details for full screen play';
+          else if (h === 1440) label = '2k quality';
+          else if (h === 2160) label = '4k quality';
+
+          videoOptions.push({
+            height: h,
+            label: label
+          });
+        }
+      });
+    } catch (ytdlpErr) {
+      console.warn('yt-dlp failed, falling back to youtubei.js:', ytdlpErr.message);
+      
+      const { Innertube } = require('youtubei.js');
+      const yt = await Innertube.create();
+      
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.trim().match(regExp);
+      const videoId = (match && match[2].length === 11) ? match[2] : null;
+      if (!videoId) {
+        throw new Error('Could not parse YouTube Video ID from link.');
+      }
+      
+      const info = await yt.getInfo(videoId);
+      title = info.basic_info.title || 'YouTube Video';
+      const durationSec = info.basic_info.duration || 0;
+      const min = Math.floor(durationSec / 60);
+      const sec = durationSec % 60;
+      durationStr = `${min}:${sec.toString().padStart(2, '0')}`;
+      
+      thumbnailUrl = info.basic_info.thumbnail?.[0]?.url || '';
+      
+      const heights = new Set();
+      const formats = [
+        ...(info.streaming_data?.formats || []),
+        ...(info.streaming_data?.adaptive_formats || [])
+      ];
+      formats.forEach(f => {
         if (f.height) {
           heights.add(f.height);
         }
       });
+
+      const targetHeights = [144, 240, 360, 480, 720, 1080, 1440, 2160];
+      targetHeights.forEach(h => {
+        if (heights.has(h)) {
+          let label = `${h}p`;
+          if (h === 144) label = 'Fast (144p) Low - Poor video quality';
+          else if (h === 240) label = 'Fast (240p) - Low quality for quick play';
+          else if (h === 360) label = 'Fast (360p) - Normal quality for quick play';
+          else if (h === 480) label = 'Fast (480p) - Normal quality for quick play';
+          else if (h === 720) label = 'High quality (720p) - Clear view and quick play';
+          else if (h === 1080) label = 'High quality (1080p) - High details for full screen play';
+          else if (h === 1440) label = '2k quality';
+          else if (h === 2160) label = '4k quality';
+
+          videoOptions.push({
+            height: h,
+            label: label
+          });
+        }
+      });
     }
-
-    const targetHeights = [144, 240, 360, 480, 720, 1080, 1440, 2160];
-    const videoOptions = [];
-
-    targetHeights.forEach(h => {
-      if (heights.has(h)) {
-        let label = `${h}p`;
-        if (h === 144) label = 'Fast (144p) Low - Poor video quality';
-        else if (h === 240) label = 'Fast (240p) - Low quality for quick play';
-        else if (h === 360) label = 'Fast (360p) - Normal quality for quick play';
-        else if (h === 480) label = 'Fast (480p) - Normal quality for quick play';
-        else if (h === 720) label = 'High quality (720p) - Clear view and quick play';
-        else if (h === 1080) label = 'High quality (1080p) - High details for full screen play';
-        else if (h === 1440) label = '2k quality';
-        else if (h === 2160) label = '4k quality';
-
-        videoOptions.push({
-          height: h,
-          label: label
-        });
-      }
-    });
 
     // Sort descending by height
     videoOptions.sort((a, b) => b.height - a.height);
