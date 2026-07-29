@@ -675,8 +675,17 @@ app.get('/api/proxy', async (req, res) => {
       }
     });
 
-    // Set appropriate content-type from target header
-    res.setHeader('Content-Type', response.headers['content-type'] || 'video/mp4');
+    // Set appropriate content-type and force attachment download header
+    const contentType = response.headers['content-type'] || 'video/mp4';
+    let filename = 'pinterest-download';
+    if (contentType.includes('image')) {
+      filename += '.jpg';
+    } else {
+      filename += '.mp4';
+    }
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     response.data.pipe(res);
   } catch (error) {
     console.error('Proxy error:', error.message);
