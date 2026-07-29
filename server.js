@@ -421,7 +421,7 @@ app.post('/api/youtube', async (req, res) => {
     console.error('YouTube extraction error:', error.message);
     res.status(500).json({
       success: false,
-      message: 'Failed to extract video details. The link might be invalid or rate-limited.'
+      message: `YouTube extraction error: ${error.message}`
     });
   }
 });
