@@ -660,7 +660,7 @@ setInterval(() => {
 
 // Proxy endpoint to bypass CORS and download files from Pinterest CDN
 app.get('/api/proxy', async (req, res) => {
-  const { url } = req.query;
+  const { url, filename } = req.query;
   if (!url) {
     return res.status(400).send('URL query parameter is required.');
   }
@@ -677,15 +677,21 @@ app.get('/api/proxy', async (req, res) => {
 
     // Set appropriate content-type and force attachment download header
     const contentType = response.headers['content-type'] || 'video/mp4';
-    let filename = 'pinterest-download';
+    let dlFilename = filename ? filename.trim() : 'pinterest-download';
+    // Sanitize filename to remove invalid characters for HTTP header safety
+    dlFilename = dlFilename.replace(/[^a-zA-Z0-9_\-+ ]/g, '_');
     if (contentType.includes('image')) {
-      filename += '.jpg';
+      if (!dlFilename.toLowerCase().endsWith('.jpg') && !dlFilename.toLowerCase().endsWith('.jpeg') && !dlFilename.toLowerCase().endsWith('.png')) {
+        dlFilename += '.jpg';
+      }
     } else {
-      filename += '.mp4';
+      if (!dlFilename.toLowerCase().endsWith('.mp4')) {
+        dlFilename += '.mp4';
+      }
     }
 
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${dlFilename}"`);
     response.data.pipe(res);
   } catch (error) {
     console.error('Proxy error:', error.message);
