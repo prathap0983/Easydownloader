@@ -215,22 +215,19 @@ async function extractPinterestVideo(pinUrl) {
   // Convert HLS (.m3u8) to MP4 link if applicable
   if (videoUrl.includes('/hls/') && videoUrl.endsWith('.m3u8')) {
     const mp4Url = videoUrl.replace('/hls/', '/720p/').replace('.m3u8', '.mp4');
+    const mp4Url480 = videoUrl.replace('/hls/', '/480p/').replace('.m3u8', '.mp4');
     try {
-      const headCheck = await axios.head(mp4Url, { timeout: 3000 });
-      if (headCheck.status === 200) {
+      const results = await Promise.allSettled([
+        axios.head(mp4Url, { timeout: 2000 }),
+        axios.head(mp4Url480, { timeout: 2000 })
+      ]);
+      if (results[0].status === 'fulfilled' && results[0].value && results[0].value.status === 200) {
         videoUrl = mp4Url;
+      } else if (results[1].status === 'fulfilled' && results[1].value && results[1].value.status === 200) {
+        videoUrl = mp4Url480;
       }
     } catch (e) {
-      // Try 480p resolution fallback
-      const mp4Url480 = videoUrl.replace('/hls/', '/480p/').replace('.m3u8', '.mp4');
-      try {
-        const headCheck480 = await axios.head(mp4Url480, { timeout: 3000 });
-        if (headCheck480.status === 200) {
-          videoUrl = mp4Url480;
-        }
-      } catch (err) {
-        // Fallback to original HLS link
-      }
+      // Fallback to original HLS link
     }
   }
 
