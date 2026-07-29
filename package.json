@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "postinstall": "node node_modules/youtube-dl-exec/scripts/postinstall.js"
   },
   "dependencies": {
     "@bochilteam/scraper": "^5.0.1",
