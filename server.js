@@ -11,6 +11,18 @@ const PORT = process.env.PORT || 3000;
 // Middleware to parse JSON payloads
 app.use(express.json());
 
+// Enable CORS middleware manually for cross-origin frontend requests
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Serve static assets from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
