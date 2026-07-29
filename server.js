@@ -350,7 +350,9 @@ app.post('/api/youtube', async (req, res) => {
       url.trim(),
       '--dump-single-json',
       '--no-check-certificates',
-      '--no-warnings'
+      '--no-warnings',
+      '--extractor-args', 'youtube:player-client=ios,android,web_embedded',
+      '--geo-bypass'
     ]);
 
     const meta = JSON.parse(stdout);
@@ -467,7 +469,9 @@ function startDownloadJob(jobId, url, height, type, title, bitrate) {
     '--audio-format', 'mp3',
     '--audio-quality', bitrate || '128K',
     '--no-check-certificates',
-    '--no-warnings'
+    '--no-warnings',
+    '--extractor-args', 'youtube:player-client=ios,android,web_embedded',
+    '--geo-bypass'
   ] : [
     url,
     '--format', `bestvideo[height<=${height}][ext=mp4]+bestaudio[ext=m4a]/best[height<=${height}][ext=mp4]/best`,
@@ -475,7 +479,9 @@ function startDownloadJob(jobId, url, height, type, title, bitrate) {
     '--ffmpeg-location', ffmpegPath,
     '--merge-output-format', 'mp4',
     '--no-check-certificates',
-    '--no-warnings'
+    '--no-warnings',
+    '--extractor-args', 'youtube:player-client=ios,android,web_embedded',
+    '--geo-bypass'
   ];
 
   const logStream = fs.createWriteStream(logPath);
