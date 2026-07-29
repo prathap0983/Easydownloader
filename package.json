@@ -1,0 +1,25 @@
+{
+  "name": "pinterest-video-downloader",
+  "version": "1.0.0",
+  "description": "A modern sky blue and white themed Pinterest Video Downloader frontend and mock server.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "@bochilteam/scraper": "^5.0.1",
+    "@distube/ytdl-core": "^4.16.12",
+    "@jerrycoder/instagram-api": "^2.5.9",
+    "@mrnima/instagram-downloader": "^1.0.0",
+    "axios": "^1.7.2",
+    "cheerio": "^1.0.0-rc.12",
+    "express": "^4.19.2",
+    "ffmpeg-static": "^5.3.0",
+    "instagram-url-direct": "^2.0.7",
+    "youtube-dl-exec": "^3.1.9",
+    "youtubei.js": "^17.2.0"
+  },
+  "author": "Antigravity",
+  "license": "ISC"
+}

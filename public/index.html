@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EasyDownloader - Fast & Free</title>
+  <!-- Google Font: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Ambient background glow spots -->
+  <div class="radial-glow glow-1"></div>
+  <div class="radial-glow glow-2"></div>
+
+  <!-- Navigation Header with Shortcuts -->
+  <header class="navbar glass-panel">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" class="logo-icon">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="8 12 12 16 16 12"></polyline>
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+        </svg>
+        <span>EasyDownloader</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features-section" class="nav-link">Features</a>
+        <a href="#faq-section" class="nav-link">FAQs</a>
+        <a href="#contact-section" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <!-- Top badge -->
+    <div class="badge-container">
+      <span class="badge">
+        <span class="badge-dot"></span>
+        Fast & Free Downloader
+      </span>
+    </div>
+
+    <!-- Main Headings -->
+    <header class="hero-section">
+      <h1 class="main-heading">Pinterest <span class="highlight-text">Video</span> Downloader</h1>
+      <p class="sub-heading">Download your favorite Pinterest videos in high quality with one click. Fast, secure, and
+        completely free.</p>
+    </header>
+
+    <!-- Downloader Section -->
+    <section id="downloader-section" class="downloader-card glass-panel">
+      <form id="downloader-form" class="input-group">
+        <div class="input-wrapper">
+          <input type="url" id="pinterest-url" placeholder="Paste Pinterest Link here..."
+            aria-label="Pinterest Video URL" required autocomplete="off">
+        </div>
+        <button type="submit" id="get-video-btn" class="btn btn-primary">
+          Get Video
+        </button>
+      </form>
+
+      <!-- Supported Platforms Section -->
+      <div class="supported-platforms">
+        <span class="supported-title">Supported Platforms:</span>
+        <div class="platform-badges">
+          <span id="platform-tab-pinterest" class="platform-badge platform-pinterest active">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="platform-icon">
+              <path
+                d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.3-.4.195-1.49-.691-2.42-2.862-2.42-4.6 0-3.747 2.722-7.189 7.852-7.189 4.12 0 7.322 2.936 7.322 6.862 0 4.093-2.579 7.387-6.159 7.387-1.202 0-2.333-.624-2.718-1.362l-.747 2.846c-.27 1.03-.997 2.32-1.485 3.114 1.122.347 2.31.536 3.543.536 6.62 0 11.987-5.367 11.987-11.987C24.004 5.367 18.638 0 12.017 0z" />
+            </svg>
+            Pinterest
+          </span>
+          <span id="platform-tab-youtube" class="platform-badge platform-youtube">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="platform-icon">
+              <path
+                d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.107C19.522 3.536 12 3.536 12 3.536s-7.522 0-9.388.52a3.003 3.003 0 0 0-2.11 2.107C0 8.029 0 12 0 12s0 3.971.502 5.837a3.003 3.003 0 0 0 2.11 2.107c1.866.52 9.388.52 9.388.52s7.522 0 9.388-.52a3.003 3.003 0 0 0 2.11-2.107C24 15.971 24 12 24 12s0-3.971-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+            YouTube
+          </span>
+
+
+        </div>
+      </div>
+
+      <!-- Dynamic Content Area (States: Loader, Success Result, Error Alert) -->
+      <div id="dynamic-state-container">
+        <!-- Initial helper prompt (optional, clean UI) -->
+      </div>
+    </section>
+
+    <!-- Step-by-Step Guide Section -->
+    <section id="guide-section" class="guide-panel glass-panel">
+      <div class="guide-header">
+        <h2>How to Download Pinterest Videos</h2>
+        <p>Save high-resolution videos, stories, and GIFs locally in 3 quick steps.</p>
+      </div>
+      <div class="guide-steps">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-badge">01</div>
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+          </div>
+          <h4>Copy URL Link</h4>
+          <p>Go to Pinterest, open the video pin, tap the <strong>Share</strong> button, and click <strong>Copy
+              Link</strong>.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-badge">02</div>
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            </svg>
+          </div>
+          <h4>Paste & Request</h4>
+          <p>Paste the copied video link into the search box at the top and hit the <strong>Get Video</strong> button.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-badge">03</div>
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h4>Download File</h4>
+          <p>Verify the video preview details, select the quality resolution details, and hit <strong>Download
+              Video</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Grid Section -->
+    <section id="features-section" class="features-grid">
+      <!-- Feature 1: Super Fast -->
+      <div class="feature-card glass-panel">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="feature-icon">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <h3>Super Fast</h3>
+        <p>Analyze and fetch direct high-speed download links in seconds.</p>
+      </div>
+
+      <!-- Feature 2: HD Quality -->
+      <div class="feature-card glass-panel">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="feature-icon">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <h3>HD Quality</h3>
+        <p>Download video files in high definition MP4 format for offline viewing.</p>
+      </div>
+
+      <!-- Feature 3: 100% Safe -->
+      <div class="feature-card glass-panel">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="feature-icon">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <h3>100% Safe</h3>
+        <p>No registration, no software downloads, completely secure and free.</p>
+      </div>
+    </section>
+
+    <!-- Detailed Info & FAQ Section -->
+    <section class="details-section">
+      <!-- Intro Card -->
+      <div class="info-block glass-panel">
+        <h2>EasyDownloader — Free Pinterest Video Downloader in Full HD</h2>
+        <p>
+          EasyDownloader is the premier online tool designed to help you extract and download high-quality videos, GIFs,
+          and images from Pinterest. Whether you want to save cooking guides, creative design ideas, or tutorial clips,
+          our tool grabs the highest resolution available — supporting Full HD, 2K, and 4K when available — completely
+          watermark-free.
+        </p>
+        <p>
+          Save files directly onto your mobile phone (iPhone or Android), desktop PC, or tablet using your standard web
+          browser. There is no software to install, no signup requirements, and no hidden fees.
+        </p>
+      </div>
+
+      <!-- Feature Grid Details -->
+      <div class="features-detailed-grid">
+        <div class="feature-detail-card glass-panel">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <path
+                d="M12 1a5 5 0 0 0-5 5v3.18a5 5 0 0 1-1.5 3.54L4.3 14.3a1 1 0 0 0 .7 1.7H19a1 1 0 0 0 .7-1.7l-1.2-1.58A5 5 0 0 1 17 9.18V6a5 5 0 0 0-5-5z">
+              </path>
+              <path d="M9 21h6"></path>
+            </svg>
+          </div>
+          <h4>Full HD & Audio Support</h4>
+          <p>Unlike many online tools that only download silent or low-resolution clips, EasyDownloader fetches
+            full-definition video sources with high-quality sound intact.</p>
+        </div>
+
+        <div class="feature-detail-card glass-panel">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+              <rect x="9" y="9" width="6" height="6"></rect>
+              <line x1="9" y1="1" x2="9" y2="4"></line>
+              <line x1="15" y1="1" x2="15" y2="4"></line>
+              <line x1="9" y1="20" x2="9" y2="23"></line>
+              <line x1="15" y1="20" x2="15" y2="23"></line>
+              <line x1="20" y1="9" x2="23" y2="9"></line>
+              <line x1="20" y1="15" x2="23" y2="15"></line>
+              <line x1="1" y1="9" x2="4" y2="9"></line>
+              <line x1="1" y1="15" x2="4" y2="15"></line>
+            </svg>
+          </div>
+          <h4>No Software Required</h4>
+          <p>EasyDownloader is fully web-based. Simply use Safari, Chrome, Edge, or Firefox. No browser extensions,
+            apps, or plugins are ever required.</p>
+        </div>
+
+        <div class="feature-detail-card glass-panel">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4l3 3"></path>
+            </svg>
+          </div>
+          <h4>Fast & Unlimited Downloads</h4>
+          <p>Save as many media pins as you want. Our bypass servers process link conversions quickly to deliver instant
+            direct-download links.</p>
+        </div>
+
+        <div class="feature-detail-card glass-panel">
+          <div class="step-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="step-icon">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h4>Safe & Secure Downloading</h4>
+          <p>We do not store cookies, collect your downloads history, or request signup parameters. Your connection is
+            fully encrypted and secure.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div id="faq-section" class="faq-block glass-panel">
+        <h3 class="faq-title">Frequently Asked Questions</h3>
+        <div class="accordion-container">
+          <!-- Q1 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>What is EasyDownloader and how does it work?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="chevron-icon">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="accordion-content">
+              <p>EasyDownloader is a free web-based utility tool that extracts direct MP4 video URLs from Pinterest
+                pins. You simply input a link, and our scraper processes the HTML tags to find and download the media
+                file onto your device.</p>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>Is there a cost to download Pinterest videos?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="chevron-icon">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="accordion-content">
+              <p>No, EasyDownloader is 100% free and requires no subscription, licensing, registration, or login
+                details.</p>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>What formats and video resolutions are supported?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="chevron-icon">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="accordion-content">
+              <p>We download videos in industry-standard MP4 format. It automatically scrapes and returns the highest
+                quality resolution uploaded to Pinterest, including 480p, 720p HD, and 1080p Full HD.</p>
+            </div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>Can I use EasyDownloader on iOS or Android devices?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="chevron-icon">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="accordion-content">
+              <p>Yes, absolutely. Our website is completely responsive and runs smoothly inside mobile browsers like
+                Safari, Chrome, and Firefox on both Android and iOS devices.</p>
+            </div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <span>Where are my video downloads saved?</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="chevron-icon">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="accordion-content">
+              <p>By default, files are saved directly in your device's standard "Downloads" folder, or the destination
+                chosen inside your browser download preferences.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact-section" class="contact-panel glass-panel">
+      <div class="contact-header">
+        <h2>Contact Us</h2>
+        <p>Have questions or feedback? Send us a message directly.</p>
+      </div>
+      <form id="contact-form" class="contact-form">
+        <div class="form-group">
+          <label for="contact-subject">Subject</label>
+          <input type="text" id="contact-subject" placeholder="What is this about?" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="contact-body">Message</label>
+          <textarea id="contact-body" rows="5" placeholder="Write your message details here..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">Send Email</button>
+      </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2026 Prathap. All Rights Reserved. We are not affiliated with Pinterest.</p>
+    </footer>
+  </main>
+
+  <!-- YouTube Download Progress Overlay -->
+  <div id="download-progress-overlay" class="progress-overlay" style="display: none;">
+    <div class="progress-box">
+      <div class="progress-spinner"></div>
+      <h3 id="progress-phase">Starting download...</h3>
+      <div class="progress-bar-bg">
+        <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+      </div>
+      <span id="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+</body>
+
+</html>
